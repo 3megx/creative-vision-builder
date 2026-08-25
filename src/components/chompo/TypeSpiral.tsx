@@ -1,49 +1,79 @@
+const WORD = "CHOMPO";
+
+/** Ring geometry inside a 600x600 viewBox, largest outside -> smallest inside. */
 const RINGS = [
-  { radius: 250, size: 30, count: 24, duration: 90 },
-  { radius: 205, size: 26, count: 22, duration: 76 },
-  { radius: 165, size: 22, count: 20, duration: 64 },
-  { radius: 130, size: 18, count: 18, duration: 54 },
+  { radius: 268, size: 52, duration: 120 },
+  { radius: 216, size: 46, duration: 104 },
+  { radius: 170, size: 40, duration: 88 },
+  { radius: 130, size: 34, duration: 74 },
+  { radius: 96, size: 28, duration: 62 },
 ];
 
 const TAGS = [
-  { label: "Pizzuuuuuu", className: "top-[24%] right-0 rotate-[-8deg]" },
-  { label: "Sanguiss", className: "top-[52%] left-0 rotate-[6deg]" },
-  { label: "Cheazzy", className: "bottom-[16%] right-[14%] rotate-[10deg]" },
+  { label: "Pizzuuuuuu", className: "top-[20%] right-[-2%] rotate-[-10deg]" },
+  { label: "Sanguiss", className: "top-[54%] left-[-3%] rotate-[8deg]" },
+  { label: "cheazzy", className: "bottom-[18%] right-[10%] rotate-[12deg]" },
 ];
 
-/** Concentric rings of repeating "CHOMPO" around a line-art face. */
+/** Average glyph advance for the condensed heavy display face, as a ratio of font size. */
+const GLYPH_RATIO = 0.62;
+
+function ringText(radius: number, size: number) {
+  const circumference = 2 * Math.PI * radius;
+  const wordWidth = (WORD.length + 0.35) * size * GLYPH_RATIO;
+  const repeats = Math.max(4, Math.round(circumference / wordWidth));
+  return WORD.repeat(repeats);
+}
+
+/** Concentric rings of "CHOMPO" curved smoothly around a line-art face. */
 export function TypeSpiral() {
   return (
     <section className="bg-cream px-4 pb-20 sm:px-6">
-      <div className="relative mx-auto aspect-square w-full max-w-[620px]">
-        {RINGS.map((ring, ringIndex) => (
-          <div
-            key={ring.radius}
-            className="absolute inset-0"
-            style={{
-              animation: `spin ${ring.duration}s linear infinite ${
-                ringIndex % 2 ? "reverse" : "normal"
-              }`,
-            }}
-          >
-            {Array.from({ length: ring.count }).map((_, index) => (
-              <span
-                key={index}
-                className="absolute top-1/2 left-1/2 font-display whitespace-nowrap text-ink"
-                style={{
-                  fontSize: `${ring.size}px`,
-                  transform: `rotate(${(360 / ring.count) * index}deg) translate(0, -${ring.radius}px)`,
-                  transformOrigin: "0 0",
-                }}
-              >
-                CHOMPO
-              </span>
+      <div className="relative mx-auto aspect-square w-full max-w-[640px]">
+        <svg
+          viewBox="0 0 600 600"
+          className="absolute inset-0 h-full w-full select-none"
+          aria-hidden="true"
+        >
+          <defs>
+            {RINGS.map((ring) => (
+              <path
+                key={ring.radius}
+                id={`spiral-ring-${ring.radius}`}
+                d={`M 300 ${300 - ring.radius} a ${ring.radius} ${ring.radius} 0 1 1 -0.01 0`}
+                fill="none"
+              />
             ))}
-          </div>
-        ))}
+          </defs>
+
+          {RINGS.map((ring, index) => (
+            <g
+              key={ring.radius}
+              style={{
+                transformBox: "fill-box",
+                transformOrigin: "center",
+                animation: `spin ${ring.duration}s linear infinite ${
+                  index % 2 ? "reverse" : "normal"
+                }`,
+                willChange: "transform",
+              }}
+            >
+              <text
+                className="font-display fill-ink"
+                style={{ fontSize: ring.size, letterSpacing: "-0.01em" }}
+                textLength={2 * Math.PI * ring.radius}
+                lengthAdjust="spacingAndGlyphs"
+              >
+                <textPath href={`#spiral-ring-${ring.radius}`} startOffset="0">
+                  {ringText(ring.radius, ring.size)}
+                </textPath>
+              </text>
+            </g>
+          ))}
+        </svg>
 
         <div className="absolute inset-0 flex items-center justify-center">
-          <FaceDoodle className="w-[26%]" />
+          <FaceDoodle className="w-[19%]" />
         </div>
 
         {TAGS.map((tag) => (
