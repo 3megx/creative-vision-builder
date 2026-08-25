@@ -29,7 +29,7 @@ function ringText(radius: number, size: number) {
 /** Concentric rings of "CHOMPO" curved smoothly around a line-art face. */
 export function TypeSpiral() {
   return (
-    <section className="bg-cream px-4 pb-20 sm:px-6">
+    <section className="bg-cream px-4 pt-10 pb-20 sm:px-6">
       <div className="relative mx-auto aspect-square w-full max-w-[640px]">
         <svg
           viewBox="0 0 600 600"
