@@ -2,12 +2,13 @@ const WORD = "CHOMPO";
 
 /** Ring geometry inside a 600x600 viewBox, largest outside -> smallest inside. */
 const RINGS = [
-  { radius: 268, size: 52, duration: 120 },
-  { radius: 216, size: 46, duration: 104 },
-  { radius: 170, size: 40, duration: 88 },
-  { radius: 130, size: 34, duration: 74 },
-  { radius: 96, size: 28, duration: 62 },
+  { radius: 246, size: 44, duration: 120 },
+  { radius: 198, size: 40, duration: 104 },
+  { radius: 155, size: 35, duration: 88 },
+  { radius: 117, size: 30, duration: 74 },
+  { radius: 85, size: 25, duration: 62 },
 ];
+
 
 const TAGS = [
   { label: "Pizzuuuuuu", className: "top-[20%] right-[-2%] rotate-[-10deg]" },
